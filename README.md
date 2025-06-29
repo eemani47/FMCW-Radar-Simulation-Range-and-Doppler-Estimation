@@ -47,7 +47,7 @@ Each target affects the beat signal differently depending on its range and Doppl
 After mixing Tx and Rx signals, I performed a 1D FFT on the beat signal to extract target distances.
 
 ### 🔍 Output:
-![1D fft](1D fft.png)
+[1D fft](1D fft.png)
 
 This plot shows **clear peaks** corresponding to the actual ranges of the targets. Since FFT bins map linearly to time delay, I scaled them to show range in meters.
 
@@ -58,7 +58,7 @@ This plot shows **clear peaks** corresponding to the actual ranges of the target
 Then, I reshaped the signal into a 2D matrix and applied a 2D FFT (along time and chirp axes) to extract both **range and velocity**.
 
 ### 🔍 Output:
-![Range-Doppler Map](images/range_doppler.png)
+[2D fft](2D fft.png)
 
 - The x-axis is velocity (Doppler), scaled using PRF and carrier wavelength
 - The y-axis is range
