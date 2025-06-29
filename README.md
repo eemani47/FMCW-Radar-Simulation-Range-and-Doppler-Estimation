@@ -1,79 +1,81 @@
-# 📡 FMCW Radar Simulation – Range and Doppler Estimation
+# FMCW Radar Simulation – Range and Doppler Estimation
 
-This is a simulation of a **Frequency-Modulated Continuous Wave (FMCW) radar system** developed in MATLAB. The system detects **multiple moving targets** and estimates both **range** and **velocity** using signal processing techniques like **FFT**.
+This project simulates a Frequency-Modulated Continuous Wave (FMCW) radar system in MATLAB to detect multiple targets, estimate their range using beat signals, and extract velocity via Doppler shift analysis. The final output includes a range profile and a range-Doppler map using FFT-based techniques.
 
----
+## Project Overview
 
-## 🎯 Objective
+The radar system is modeled with a 77 GHz carrier frequency and designed to detect targets up to 200 meters away with a range resolution of 1 meter. The simulation accounts for the relative motion of targets and simulates both transmitted and received signals, allowing analysis of how range and Doppler information is encoded.
 
-The goal was to:
-- Simulate how FMCW radar detects moving targets
-- Estimate range using **beat signals**
-- Extract velocity through **Doppler processing**
-- Visualize results in both 1D (range) and 2D (range vs. velocity)
+## Simulation Details
 
----
+- **Radar Type:** FMCW (Frequency-Modulated Continuous Wave)
+- **Language:** MATLAB
+- **Main File:** `FMCW radar_simulation.m`
+- **Output Images:**
+  - `1D fft.png` – Range estimation (1D FFT)
+  - `2D fft.png` – Range-Doppler map (2D FFT)
 
-## 📐 Radar Configuration
+## Target Configuration
 
-| Parameter             | Value                 |
-|----------------------|-----------------------|
-| Carrier Frequency     | 77 GHz                |
-| Max Range             | 200 m                 |
-| Range Resolution      | 1 m                   |
-| Max Velocity          | ±100 m/s              |
-| Chirp Bandwidth       | 150 MHz (derived)     |
-| Chirp Duration        | ~7.33 µs              |
-| Sampling per Chirp    | 1024 (Nr)             |
-| Chirps in Sequence    | 256 (Nd)              |
-| PRF                   | 1 / Tchirp            |
+Three targets are simulated with different positions and velocities:
 
----
+| Target | Initial Range (m) | Velocity (m/s) |
+|--------|--------------------|----------------|
+| 1      | 60                 | –40            |
+| 2      | 110                | +30            |
+| 3      | 160                | 0              |
 
-## 🧪 Target Simulation
+Each target introduces a unique time delay and Doppler shift in the received signal.
 
-I simulated 3 targets at different positions and speeds:
+## 1D FFT – Range Estimation
 
-- Target 1: **60 m**, **–40 m/s**
-- Target 2: **110 m**, **+30 m/s**
-- Target 3: **160 m**, **0 m/s**
+After mixing transmitted and received signals, a 1D FFT is applied along the range (fast-time) dimension to extract beat frequencies corresponding to target distances.
 
-Each target affects the beat signal differently depending on its range and Doppler shift.
+### Output Plot
 
----
+![1D FFT](./1D%20fft.png)
 
-## 📊 1D FFT – Range Estimation
+This plot shows the signal amplitude across different ranges. Peaks correspond to the detected target positions, clearly resolving the three simulated targets.
 
-After mixing Tx and Rx signals, I performed a 1D FFT on the beat signal to extract target distances.
+## 2D FFT – Range-Doppler Map
 
-### 🔍 Output:
-[1D fft](1D fft.png)
+To extract velocity information, a 2D FFT is performed across both fast-time (range) and slow-time (Doppler) dimensions. The Doppler axis is scaled using the radar wavelength and chirp repetition frequency.
 
-This plot shows **clear peaks** corresponding to the actual ranges of the targets. Since FFT bins map linearly to time delay, I scaled them to show range in meters.
+### Output Plot
 
----
+![2D FFT](./2D%20fft.png)
 
-## 🌀 2D FFT – Range-Doppler Map
+The image shows target reflections in both range and velocity axes. Negative and positive Doppler shifts indicate motion towards or away from the radar. The static target is seen at zero velocity.
 
-Then, I reshaped the signal into a 2D matrix and applied a 2D FFT (along time and chirp axes) to extract both **range and velocity**.
+## Observations & Challenges
 
-### 🔍 Output:
-![2D fft](images/2D fft.png)
+- **Range Estimation:** Accurate with clear peaks at expected distances.
+- **Velocity Estimation:** Reasonable but slightly offset due to FFT bin mismatch.
+- **Artifacts:** Spectral leakage from rectangular windowing was noticeable; using a 2D Hamming window improved clarity.
+- **Scaling:** Doppler axis calibrated using `lambda` and PRF; minor tuning may improve accuracy.
 
-- The x-axis is velocity (Doppler), scaled using PRF and carrier wavelength
-- The y-axis is range
-- Bright spots show where targets exist with their relative velocity
+## How to Run
 
-> **Observation:** While range estimation was accurate, **velocity resolution** was slightly off due to **FFT bin mismatch** and coarse **Doppler calibration**. I’m currently tuning the FFT windowing and PRF parameters to resolve this.
+1. Open `FMCW radar_simulation.m` in MATLAB.
+2. Ensure the figures are saved automatically or use `saveas` to generate the two `.png` plots.
+3. The script will display:
+   - A range plot via 1D FFT.
+   - A range-Doppler map via 2D FFT.
 
----
+## File List
 
-## 📌 Code Workflow Summary
+- `FMCW radar_simulation.m` – Main MATLAB script
+- `1D fft.png` – Plot showing range estimation via 1D FFT
+- `2D fft.png` – Plot showing range-Doppler map via 2D FFT
+- `README.md` – Project documentation
 
-```matlab
-% 1. Define radar parameters
-% 2. Simulate moving targets with Doppler shift
-% 3. Generate Tx and Rx chirp signals
-% 4. Mix signals to get beat frequency
-% 5. Apply windowing and FFT for range and Doppler
-% 6. Visualize range and velocity maps
+## Learning Outcomes
+
+This project helped me understand how radar signal processing works in practice. I explored:
+
+- Chirp signal generation and mixing
+- FFT-based feature extraction
+- Scaling and interpreting Doppler information
+- Trade-offs in resolution, windowing, and FFT accuracy
+
+It was a valuable exercise in combining mathematical modeling with signal visualization to simulate a real-world sensing system.
