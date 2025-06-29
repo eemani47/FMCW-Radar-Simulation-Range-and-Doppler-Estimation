@@ -58,7 +58,7 @@ This plot shows **clear peaks** corresponding to the actual ranges of the target
 Then, I reshaped the signal into a 2D matrix and applied a 2D FFT (along time and chirp axes) to extract both **range and velocity**.
 
 ### 🔍 Output:
-[2D fft](2D fft.png)
+[2D fft](images/2D fft.png)
 
 - The x-axis is velocity (Doppler), scaled using PRF and carrier wavelength
 - The y-axis is range
